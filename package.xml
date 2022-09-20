@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>epd_onnxruntime_vendor</name>
+  <version>0.0.0</version>
+  <description>
+    Wrapper around onnxruntime, it provides a fixed CMake module and an ExternalProject build of it.
+  </description>
+  <maintainer email="chenbn@artc.a-star.edu.sg">Chen Bainian</maintainer>
+  <license>Apache License 2.0</license>  <!-- the contents of this package are Apache 2.0 -->
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
+
