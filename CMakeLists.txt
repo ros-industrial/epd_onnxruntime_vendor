@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.13)
 
 project(epd_onnxruntime_vendor)
 
-option(FORCE_BUILD_VENDOR_PKG
-  "Build onnxruntime from source, even if system-installed package is available"
-  OFF)
-
 find_package(ament_cmake REQUIRED)
 
 macro(build_onnxruntime)
@@ -69,34 +65,24 @@ macro(build_onnxruntime)
   )
 endmacro()
 
-# NO_CMAKE_PACKAGE_REGISTRY used to avoid finding the library downloaded in WORKSPACE B
-# TODO(Briancbn): Verify force build vendor pkg with existing installation in /usr/local/lib
-find_library(onnxruntime_LIBRARIES NAMES onnxruntime PATHS /usr/local/lib)
+build_onnxruntime()
 
-if(FORCE_BUILD_VENDOR_PKG OR onnxruntime_LIBRARIES STREQUAL onnxruntime_LIBRARIES-NOTFOUND)
-  build_onnxruntime()
-
-  # TODO(Briancbn): environment variables in Windows
-  if(WIN32)
-    ament_environment_hooks(env_hook/epd_onnxruntime_vendor_library_path.bat)
-    set(ENV_VAR_NAME "PATH")
-    set(ENV_VAR_VALUE "opt\\epd_onnxruntime_vendor\\bin")
-  else()
-    ament_environment_hooks(env_hook/epd_onnxruntime_vendor_library_path.sh)
-    if(APPLE)
-      set(ENV_VAR_NAME "DYLD_LIBRARY_PATH")
-    else()
-      set(ENV_VAR_NAME "LD_LIBRARY_PATH")
-    endif()
-    set(ENV_VAR_VALUE "opt/epd_onnxruntime_vendor/lib")
-  endif()
-  ament_environment_hooks(env_hook/epd_onnxruntime_vendor_library_path.dsv.in)
+# TODO(Briancbn): environment variables in Windows
+if(WIN32)
+  ament_environment_hooks(env_hook/epd_onnxruntime_vendor_library_path.bat)
+  set(ENV_VAR_NAME "PATH")
+  set(ENV_VAR_VALUE "opt\\epd_onnxruntime_vendor\\bin")
 else()
-  message(WARNING "Found onnxruntime in path ${onnxruntime_LIBRARIES}")
+  ament_environment_hooks(env_hook/epd_onnxruntime_vendor_library_path.sh)
+  if(APPLE)
+    set(ENV_VAR_NAME "DYLD_LIBRARY_PATH")
+  else()
+    set(ENV_VAR_NAME "LD_LIBRARY_PATH")
+  endif()
+  set(ENV_VAR_VALUE "opt/epd_onnxruntime_vendor/lib")
 endif()
+ament_environment_hooks(env_hook/epd_onnxruntime_vendor_library_path.dsv.in)
 
 ament_package(
   CONFIG_EXTRAS "epd_onnxruntime_vendor-extras.cmake.in"
 )
-
-
