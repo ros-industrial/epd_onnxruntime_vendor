@@ -9,6 +9,7 @@
   <license>Apache License 2.0</license>  <!-- the contents of this package are Apache 2.0 -->
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>git</buildtool_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
